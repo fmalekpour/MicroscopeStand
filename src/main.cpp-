@@ -1,0 +1,119 @@
+#include <Arduino.h>
+
+#define step_pin 2 // Pin 3 connected to Steps pin on EasyDriver
+#define dir_pin 3 // Pin 2 connected to Direction pin
+#define MS1 4 // Pin 5 connected to MS1 pin
+#define MS2 5 // Pin 4 connected to MS2 pin
+#define SLEEP 7 // Pin 7 connected to SLEEP pin
+#define X_pin A1 // Pin A0 connected to joystick x axis
+ 
+int direction; // Variable to set Rotation (CW-CCW) of the motor
+int steps = 5000; // Assumes the belt clip is in the Middle
+ 
+void setup () {
+   pinMode (MS1, OUTPUT);
+   pinMode (MS2, OUTPUT);
+   pinMode (dir_pin, OUTPUT);
+   pinMode (step_pin, OUTPUT);
+   pinMode (SLEEP, OUTPUT);
+   
+   digitalWrite (SLEEP, HIGH); // Wake up EasyDriver
+   delay (5); // Wait for EasyDriver wake up
+   
+ 
+/* Configure type of Steps on EasyDriver:
+// MS1 MS2
+//
+// LOW LOW = Full Step //
+// HIGH LOW = Half Step //
+// LOW HIGH = A quarter of Step //
+// HIGH HIGH = An eighth of Step //
+*/
+ 
+   digitalWrite (MS1, LOW); // Configures to Full Steps
+   digitalWrite (MS2, LOW); // Configures to Full Steps
+   
+}
+ 
+void loop () {
+	/*
+  while (analogRead (X_pin) >= 0 && analogRead (X_pin) <= 100) {
+    if (steps> 0) {
+      digitalWrite (dir_pin, HIGH); // (HIGH = anti-clockwise / LOW = clockwise)
+      digitalWrite (step_pin, HIGH);
+      delay (1);
+      digitalWrite (step_pin, LOW);
+      delay (1);
+      steps--;
+    }
+  }
+  */
+  
+    while (analogRead (X_pin)> 100 && analogRead (X_pin) <= 400) {
+      if (steps <512) {
+        digitalWrite (dir_pin, LOW); // (HIGH = anti-clockwise / LOW = clockwise)
+        digitalWrite (step_pin, HIGH);
+        delay (1);
+         digitalWrite (step_pin, LOW);
+        delay (1);
+        steps ++;
+      }
+      if (steps> 512) {
+        digitalWrite (dir_pin, HIGH);
+        digitalWrite (step_pin, HIGH);
+        delay (1);
+         digitalWrite (step_pin, LOW);
+        delay (1);
+        steps--;
+      }
+    }
+      
+    while (analogRead (X_pin)> 401 && analogRead (X_pin) <= 600) {
+      if (steps <1025) {
+        digitalWrite (dir_pin, LOW);
+        digitalWrite (step_pin, HIGH);
+        delay (1);
+         digitalWrite (step_pin, LOW);
+        delay (1);
+        steps ++;
+      }
+      if (steps> 1025) {
+        digitalWrite (dir_pin, HIGH);
+        digitalWrite (step_pin, HIGH);
+        delay (1);
+         digitalWrite (step_pin, LOW);
+        delay (1);
+        steps--;
+      }
+    }
+ 
+    while (analogRead (X_pin)> 601 && analogRead (X_pin) <= 900) {
+      if (steps <1535) {
+        digitalWrite (dir_pin, LOW);
+        digitalWrite (step_pin, HIGH);
+        delay (1);
+         digitalWrite (step_pin, LOW);
+        delay (1);
+        steps ++;
+      }
+      if (steps> 1535) {
+        digitalWrite (dir_pin, HIGH);
+        digitalWrite (step_pin, HIGH);
+        delay (1);
+         digitalWrite (step_pin, LOW);
+        delay (1);
+        steps--;
+      }
+    }
+   
+    while (analogRead (X_pin)> 900 && analogRead (X_pin) <= 1024) {
+      if (steps <2050) {
+        digitalWrite (dir_pin, LOW);
+        digitalWrite (step_pin, HIGH);
+        delay (1);
+         digitalWrite (step_pin, LOW);
+        delay (1);
+        steps ++;
+      }
+    }
+}
